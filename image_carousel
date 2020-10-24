@@ -1,0 +1,47 @@
+//slideWidth(int) --> width of carouselFrame in vw
+//carouselFrame(node) --> the frame housing the pictures/items
+//carouselItems(htmlCollection//array) --> housing the items inside the frame
+function Slider(slideWidth, carouselFrame, carouselItems){
+    //starts at 1 cause 0 == prepended picture
+    let position = 1;
+
+    //clones first and last item to act as buffer when transitioning
+    carouselFrame.prepend(carouselItems[carouselItems.length - 1].cloneNode(true));
+    carouselFrame.append(carouselItems[1].cloneNode(true)); //picture[1] because [0] is the picture prepended above
+    
+    //moves the frame so the first item is in frame and not the prepended picture
+    slideInner.style.transform = `translateX(-${slideWidth * position}vw)`;
+
+    //checks after transition if the frame needs to be reset
+    slideInner.ontransitionend = ()=>{
+        //if has just transitioned to the last element(clone), move to the real copy at the start of the carousel 
+        if(position == pictures.length - 1){
+            slideInner.style.transition = "none";
+            slideInner.style.transform = `translateX(-${slideWidth}vw)`;
+            position = 1;
+        }
+        //same as above, but for when transitinining backward
+        else if(position == 0){
+            slideInner.style.transition = "none";
+            slideInner.style.transform = `translateX(-${(pictures.length - 2) * slideWidth}vw)`;
+            position = pictures.length - 2;
+        }
+    }
+
+    //the actual functioned returned/used
+    return (dir)=>{
+        
+        carouselFrame.style.transition = `all ease-in-out ${transitionTime}ms`;
+
+        if(dir){
+            if(position === 0){return;}
+            position--;
+        }else{
+            if(position > carouselItems.length - 2){return;}
+            position++;
+        }
+
+        carouselFrame.style.transform = `translateX(-${slideWidth * position}vw)`;
+
+    }
+}
