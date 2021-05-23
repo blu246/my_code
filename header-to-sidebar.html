@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+<!-- STYLING -->
+        <style>
+            *{
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            
+            body{
+                background: repeating-linear-gradient(rgb(15, 15, 20) 0vh 100vh, rgb(28, 39, 49) 100vh 200vh);
+                height: 300vh;
+                padding: 15vh 0;
+            }
+
+            #side-header{
+                width: 100%;
+                min-height: 1px;
+                padding: 1rem;
+                background: rgb(12, 9, 22);
+                color: rgba(255, 255, 255, 0.877);
+                font-size: 1.2rem;
+                font-weight: 700;
+                position: fixed;
+                opacity: 0.9;
+                top: 0;
+                border: 1px solid rgba(255, 255, 255, 0.096);
+
+                transition: all .4s ease-in-out;
+            }
+            #perc{
+                color: rgb(77, 247, 44);
+            }
+
+            #content{
+                min-height: 100%;
+                width: 60vw;
+                background: repeating-linear-gradient(rgb(0, 175, 53) 0 33.333vh,rgb(181, 184, 9) 33.333vh 66.666vh, rgb(99, 7, 71) 66.666vh 100vh);
+                margin-left: 30vw;
+                /* margin-top: 15vh;
+                margin-bottom: 15vh; */
+                color: #ddd;
+                padding: 2rem;
+                border: 2px solid #3c4bcf;
+            }
+        </style>
+    </head>
+
+<!-- BODY -->
+    <body>
+            <div id="side-header">This is the supposed to be the header <span id="perc"></span></div>
+            <div id="content">This is just some content</div>
+    </body>
+
+<!-- SCRIPT -->
+    <script>
+        const body = document.getElementsByTagName("body")[0],
+              header = document.getElementById("side-header");
+              span = document.getElementById("perc");
+              
+        
+
+        
+        function applyHeaderForm(form){
+            const hs = header.style;
+            hs.transition = "all .4s ease-in-out";
+
+            if(form == "header"){
+                hs.width = "100%"
+                hs.minHeight = "0.1vh"
+            } else if(form = "side"){
+                hs.width = "20vw"
+                hs.minHeight = "100vh"
+            }
+        }
+        function calcIfHeaderMorph(perc){
+            if(perc <= 20){
+                applyHeaderForm("header");
+            }
+
+            if(perc >=30){
+                applyHeaderForm("side");
+            }
+
+        }
+
+        function applyHeaderFormVer2(position){
+            
+            const hs = header.style;
+            const minWidth = 20, maxWidth = 100, minHeight = 0.1, maxHeight = 100;
+            const posInv = 100 - position;
+            hs.transition = "none";
+
+            const calcWidth = 20 > posInv ? 20 : posInv;
+            const calcHeight = position = 0 ? 0.1 : position;
+
+            hs.width = calcWidth + "vw";
+            hs.minHeight = calcHeight + "vh";
+        }
+
+
+        function logScrollPerc(){
+            let scrollPerc = window.pageYOffset / (body.offsetHeight -  window.innerHeight);
+            scrollPerc = Math.round(scrollPerc * 100);
+
+            // transition at certain point OR transition continously
+            calcIfHeaderMorph(scrollPerc)
+            // applyHeaderFormVer2(scrollPerc)
+
+            span.innerText = scrollPerc + "%";
+
+        }
+
+
+        window.addEventListener("scroll", logScrollPerc);
+
+    </script>
+</html>
